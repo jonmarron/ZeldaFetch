@@ -4,6 +4,7 @@ import Equipment from './components/equipment/Equipment';
 import Material from './components/materials/Material';
 
 function App() {
+  const [allElements, setAllElements] = useState([])
   const [creatures, setCreatures] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [equipment, setEquipment] = useState([]);
@@ -14,7 +15,7 @@ function App() {
         <h1>Breath of the wild Encyclopaedia</h1>
       </header>
       <section className="w-full flex justify-start gap-2">
-        <button>All</button>
+        <button className='active'>All</button>
         <button>Creatures</button>
         <button>Materials</button>
         <button>Equipment</button>
