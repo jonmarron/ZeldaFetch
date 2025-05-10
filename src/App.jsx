@@ -12,7 +12,8 @@ function App() {
   return (
     <>
       <header className="w-full">
-        <h1>Breath of the wild Encyclopaedia</h1>
+        <span className='text-2xl'>Encyclopaedia</span>
+        <h1 className='font-bold'>Breath of the wild</h1>
       </header>
       <section className="w-full flex justify-start gap-2">
         <button className='active'>All</button>
