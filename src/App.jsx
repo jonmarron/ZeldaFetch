@@ -14,9 +14,10 @@ function App() {
         <h1>Breath of the wild Encyclopaedia</h1>
       </header>
       <section className="w-full flex justify-start gap-2">
-        <button>Fetch creatures</button>
-        <button>Fetch materials</button>
-        <button>Fetch equipment</button>
+        <button>All</button>
+        <button>Creatures</button>
+        <button>Materials</button>
+        <button>Equipment</button>
       </section>
       <section className="w-full flex justify-start items-start gap-6 flex-wrap">
         <Creature
