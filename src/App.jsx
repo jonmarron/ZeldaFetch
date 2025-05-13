@@ -1,20 +1,28 @@
 import { useEffect, useState } from 'react';
 import Creature from './components/creatures/Creature';
 import Equipment from './components/equipment/Equipment';
-import Material from './components/materials/Material';
-import { getByCategory } from './helpers/apiRequests';
+import Material from './components/materials/Material'
+
+import { getAll, getByCategory } from './helpers/apiRequests';
 
 function App() {
-  const [allElements, setAllElements] = useState([]);
-  const [creatures, setCreatures] = useState([]);
-  const [materials, setMaterials] = useState([]);
-  const [equipment, setEquipment] = useState([]);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [active, setActive] = useState('all');
 
   useEffect(() => {
-    getByCategory('equipment').then(data => {
-      setEquipment(data)
-    }) 
-  }, []);
+    if (active !== 'all') {
+      getByCategory(active).then((data) => {
+        setIsLoading(true);
+        setData(data);
+      }).then(()=> setIsLoading(false));
+    } else {
+      getAll().then((data) => {
+        setIsLoading(true);
+        setData(data);
+      }).then(()=> setIsLoading(false));
+    }
+  }, [active]);
 
   return (
     <>
@@ -23,49 +31,67 @@ function App() {
         <h1 className="font-bold">Breath of the wild</h1>
       </header>
       <section className="w-full flex justify-start gap-2">
-        <button className="active" onClick={() => setActive('all')}>All</button>
-        <button onClick={() => setActive('creatures')}>Creatures</button>
-        <button onClick={() => setActive('materials')}>Materials</button>
-        <button onClick={() => setActive('equipment')}>Equipment</button>
+        <button
+          className={active === 'all' ? 'active' : ''}
+          onClick={() => setActive('all')}
+        >
+          All
+        </button>
+        <button
+          className={active === 'creatures' ? 'active' : ''}
+          onClick={() => setActive('creatures')}
+        >
+          Creatures
+        </button>
+        <button
+          className={active === 'materials' ? 'active' : ''}
+          onClick={() => setActive('materials')}
+        >
+          Materials
+        </button>
+        <button
+          className={active === 'equipment' ? 'active' : ''}
+          onClick={() => setActive('equipment')}
+        >
+          Equipment
+        </button>
       </section>
       <section className="w-full flex justify-start items-start gap-6 flex-wrap">
-        {equipment?.map((equipment, index) => {
-          return (
-            <Equipment
-              key={index}
-              imgSrc={equipment.image}
-              name={equipment.name}
-              locations={equipment['common_locations']}
-              properties={equipment.properties}
-            />
-          );
+        {isLoading ? 'Loading' : 
+        data?.map((dataItem, index) => {
+          switch (dataItem.category) {
+            case 'equipment':
+              return (
+                <Equipment
+                  key={index}
+                  imgSrc={dataItem.image}
+                  name={dataItem.name}
+                  locations={dataItem['common_locations']}
+                  properties={dataItem.properties}
+                />
+              );
+            case 'creatures':
+              return (
+                <Creature
+                  key={index}
+                  imgSrc={dataItem.image}
+                  name={dataItem.name}
+                  drops={dataItem.drops}
+                />
+              );
+            case 'materials':
+              return (
+                <Material
+                key={index}
+                  imgSrc={dataItem.image}
+                  name={dataItem.name}
+                  locations={dataItem.locations}
+                  cookingEffect={dataItem['cooking_effect']}
+                />
+              );
+          }
         })}
-        {/* <Equipment
-          imgSrc={
-            'https://botw-compendium.herokuapp.com/api/v3/compendium/entry/wooden_shield/image'
-          }
-          name={'wooden shield'}
-          locations={['Hyrule Field', 'East Necluda']}
-          properties={{
-            attack: 0,
-            defense: 2,
-          }}
-        /> */}
-        {/* <Creature
-          imgSrc={
-            'https://botw-compendium.herokuapp.com/api/v3/compendium/entry/moblin/image'
-          }
-          name={'Moblin'}
-          drops={['Moblin Horn', 'Moblin Fang']}
-        /> */}
-        {/* <Material
-          imgSrc={
-            'https://botw-compendium.herokuapp.com/api/v3/compendium/entry/voltfruit/image'
-          }
-          name={'voltfruit'}
-          locations={['Gerudo Desert', 'Gerudo Highlands']}
-          cookingEffect={'shock resistance'}
-        /> */}
+      
       </section>
     </>
   );
