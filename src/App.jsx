@@ -52,6 +52,12 @@ function App() {
           Creatures
         </button>
         <button
+          className={active === 'monsters' ? 'active' : ''}
+          onClick={() => setActive('monsters')}
+        >
+         Monsters
+        </button>
+        <button
           className={active === 'materials' ? 'active' : ''}
           onClick={() => setActive('materials')}
         >
@@ -73,7 +79,7 @@ function App() {
           />
         </div>
       </section>
-      <section className="w-full flex justify-start items-start gap-6 flex-wrap">
+      <section className="w-full flex justify-start items-stretch gap-6 flex-wrap">
         {isLoading
           ? 'Loading'
           : data?.map((dataItem, index) => {
@@ -90,6 +96,15 @@ function App() {
                     />
                   );
                 case 'creatures':
+                  return (
+                    <Creature
+                      key={index}
+                      imgSrc={dataItem.image}
+                      name={dataItem.name}
+                      drops={dataItem.drops}
+                    />
+                  );
+                case 'monsters':
                   return (
                     <Creature
                       key={index}
