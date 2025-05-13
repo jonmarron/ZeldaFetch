@@ -15,11 +15,11 @@ const Material = ({imgSrc, name, locations, cookingEffect}) => {
             })}
           </ul>
         </div>}
-        <div>
+        {cookingEffect && <div>
             <h3 className='font-semibold'>Cooking effect:</h3>
             <p>- {cookingEffect}</p>
           <p></p>
-        </div>
+        </div>}
       </div>
     </div>
   )
